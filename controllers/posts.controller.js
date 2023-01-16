@@ -3,7 +3,7 @@ const PostModel = require("../models/post.model")
 exports.fetch = async (req, res) => {
     
     try {
-        const data = await PostModel.find({ userId: req.userID, device: req.query.device})
+        const data = await PostModel.find({ userId: req.userID})
         res.send(data);
     } catch (error) {
         res.status(500).json({ Error: error.message })
