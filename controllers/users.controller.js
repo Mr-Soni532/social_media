@@ -7,8 +7,8 @@ const jwt_secret = process.env.jwtSecret;
 exports.register = async (req, res) => {
     const { name, email, gender, password } = req.body;
     try {
-        const user = await UserModel.findOne({ email });
-        if (!user) {
+        const user = await UserModel.find({ email });
+        if (!user.length) {
             bcrypt.hash(password, 10, async (err, hash) => {
                 if (err) res.json({ err });
                 let newUser = new UserModel({ name, email, gender, password: hash })
@@ -26,12 +26,12 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await UserModel.findOne({ email });
-        if (user) {
-             bcrypt.compare(password, user.password, async(err, result) => {
+        const user = await UserModel.find({ email });
+        if (user.length) {
+             bcrypt.compare(password, user[0].password, async(err, result) => {
                 if (err) res.json({ err: err.message })
                 if (result) {
-                    const token = jwt.sign(user.id, jwt_secret);
+                    const token = jwt.sign(user[0].id, jwt_secret);
                     res.json({ token })
                 } else {
                     res.status(400).json({ err: 'user not found!' })
