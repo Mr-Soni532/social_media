@@ -9,7 +9,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 //middleware
-app.use(cors())
+// app.use(cors())
 app.use(express.json())
 app.use('/users/', userRouter)
 app.use('/posts/', postsRouter)
